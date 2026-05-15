@@ -14,10 +14,13 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
+from src.config import AIRFLOW_INPUT_FILE, SUMMARY_FILE
+from src.validation import run_lab_check
+
 
 def validate_orders_task() -> dict:
     """
-    TODO:
+    Complete the validation workflow:
     1. Import config values.
     2. Read the input CSV.
     3. Validate the rows.
@@ -25,7 +28,14 @@ def validate_orders_task() -> dict:
     5. Send the Discord alert.
     6. Raise an error on failed validation.
     """
-    raise NotImplementedError
+    # Run the lab check which includes validation, summary writing, and Discord notification
+    summary = run_lab_check(
+        input_path=AIRFLOW_INPUT_FILE,
+        output_path=SUMMARY_FILE,
+        skip_discord=False  # We want to send Discord notifications in Airflow
+    )
+    
+    return summary
 
 
 if DAG is not None:
